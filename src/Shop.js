@@ -83,6 +83,8 @@ export default function Shop(props) {
             <div className="container mx-auto">
         <h1 className="text-5xl text-black dark:text-green-200 font-bold pb-10 text-center">Shop</h1>
         <ul className="list-none flex flex-wrap mx-15 justify-center text-center">
+            {props.items.length === 0    && <h1 className="text-6xl text-black dark:text-green-200">Where are my items?
+            <em className="hover:underline hover:text-red-500" onClick={props.onAdminGoFromShop}>Add!</em></h1>}
     {props.items.map(item => (
         <li key={item.id}>
             <Item info={item} />
