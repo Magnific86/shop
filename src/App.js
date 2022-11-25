@@ -103,7 +103,7 @@ function handleAdminToShop() {
 if(login) {
     return (<>
     <div className="min-h-max bg-green-200 dark:bg-slate-500 flex flex-row space-between">
-        <div className=" container mx-auto px-10" >
+        <div className="min-h-screen container mx-auto px-10" >
         <Shop items={items} login={login}/>
         </div>
         <div>
