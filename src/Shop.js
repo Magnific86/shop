@@ -15,16 +15,17 @@ export default function Shop(props) {
     useEffect(() => {
         localStorage.setItem("userlist", JSON.stringify(userlist))
         document.title = `Товаров в магазине: ${props.items.length} Товаров в корзине: ${userlist.length}`
-    }, [userlist, basket, total, props.login])
+    }, [userlist, basket, total, props.login, props.items])
 
     function handlePlusItem() {
-        setTotal(prev => prev + 1)
+        setTotal(total + 1)
     }
     function handleMinusItem() {
         if(total > 0) {
-            setTotal(prev => prev - 1)
-        } 
-        setTotal(0)
+            setTotal(total - 1)
+        } else {
+            setTotal(0)
+        }
     }
 
     function handleDeleteItem(id) {
@@ -39,39 +40,69 @@ export default function Shop(props) {
         }
     }
 
+    function handleResetBasket() {
+        setUserlist([])
+    }
+
     if(basket) {
         return (<>
-        <h1>Shopping cart</h1>
-           <ul>
-      {userlist.length === 0 && <h3>Add first item</h3>}
+        <div className="flex flex-col align-center min-h-screen">
+        <h1 className="text-4xl text-black dark:text-green-200 text-center mb-10 pt-16">Shopping cart</h1>
+           <ul className="list-none flex flex-wrap justify-center pt-10">
+      {userlist.length === 0 && <h3 className="text-5xl text-black dark:text-green-200 text-center hover:underline" onClick={() => setBasket(false)}
+      >Add first item!</h3>}
       {userlist.length > 0 && userlist.map(item => (
         <li key={item.id}>
             <Item info={item} />
-            <button onClick={() => handlePlusItem(item.id)}>+</button>
-            <h3>{total}</h3>
-            <button onClick={handleMinusItem}>-</button>
-            <button onClick={() => handleDeleteItem(item.id)}>Delete</button>
+            <div className="flex">
+            <button onClick={() => handlePlusItem(item.id)} className="text-2xl text-white dark:text-green-200 rounded-full
+            bg-black dark:bg-greeb-200 px-4 py-2">+</button>
+            <h3 className="text-3xl text-black dark:text-green-200 px-6">{total}</h3>
+            <button onClick={handleMinusItem}
+            className="text-2xl text-white dark:text-green-200 rounded-full
+            bg-black dark:bg-greeb-200 px-4 py-2"
+            >-</button>
+             <button onClick={() => handleDeleteItem(item.id)}
+             className="text-2xl text-white dark:text-green-200 rounded-full
+             bg-black dark:bg-greeb-200 px-4 py-2 hover:bg-red-500 align-center ml-4"
+             >Delete</button>
+             </div>
         </li>
       ))}
    </ul>
-   <button onClick={() => setBasket(false)}>Back to shop</button>
+   <div className="flex justify-between">
+   {userlist.length > 0 && <button onClick={handleResetBasket}
+    className="text-2xl text-red-700 rounded-full bg-red-400 hover:underline px-4 py-2 mx-auto mt-10">Delete all</button>}
+   <button onClick={() => setBasket(false)}
+    className="text-2xl bg-black text-green-200 dark:text-green-200 dark:bg-black rounded-full hover:underline px-4 py-2">Back to shop</button>
+   </div>
+   </div>
         </>)
     }
     else if(!basket) {
         return (<>
-        <h1>Shop</h1>
-        <ul>
+        <div className="text-center flex space-between">
+            <div className="">
+            <button onClick={() => setBasket(!basket)}
+             className="bg-green-300 rounded-3xl px-6 py-3 dark:bg-black dark:text-green-200 text-center">
+                Go to cart
+            </button>
+            </div>
+            <div className="container mx-auto">
+        <h1 className="text-5xl text-black dark:text-green-200 font-bold pb-10 text-center">Shop</h1>
+        <ul className="list-none flex flex-wrap mx-15 justify-center text-center">
     {props.items.map(item => (
         <li key={item.id}>
             <Item info={item} />
-          {!userlist.includes(item) && <button onClick={() => handleAddItem(item)}>Add to cart</button>} 
+          {!userlist.includes(item) && <button onClick={() => handleAddItem(item)}
+           className="bg-green-300 rounded-3xl px-6 py-3 dark:bg-black dark:text-green-200"
+          >Add to cart</button>} 
           {userlist.includes(item) && <p>Added</p>  }
         </li>
     ))}
     </ul>
-    <button onClick={() => {
-        setBasket(true)
-    }}>Go to cart</button>
+    </div>
+    </div>
         </>)
     }
 }

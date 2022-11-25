@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import uuid from "react-uuid"
-import Login from "./Login";
 import Admin from "./Admin"
 import Form from "./Form"
 import Shop from "./Shop"
+import DarkMode from "./DarkMode";
 
 export default function App() {
   const [login, setLogin] = useState(false);
@@ -13,6 +13,7 @@ export default function App() {
   const [name, setName] = useState("")
   const [desc, setDesc] = useState("")
   const [valid, setValid] = useState("")
+  const [theme, setTheme] = useState("dark")
   const [items, setItems] = useState(() => {
     let data = JSON.parse(localStorage.getItem("items"))
     if(!data) {
@@ -21,7 +22,17 @@ export default function App() {
     return data
 })
 
+useEffect(() => {
+    if(theme === "dark" ) {
+        document.documentElement.classList.add("dark")
+    } else {
+        document.documentElement.classList.remove("dark")
+    }
+}, [theme])
 
+function handleThemeSwitch() {
+    setTheme(theme === "dark" ? "light" : "dark")
+}
 
 function handleName(e) {
     setName(e.target.value)
@@ -73,6 +84,7 @@ function handleReset() {
     setItems([])
 }
 
+
 useEffect(() => {
 document.title = "Добро пожаловать"
 }, [])
@@ -82,17 +94,39 @@ useEffect(() => {
 }, [items])
 
 
+function handleAdminToShop() {
+    setAdmin(!admin)
+    setLogin(!login)
+}
+
+
 if(login) {
     return (<>
+    <div className="min-h-max bg-green-200 dark:bg-slate-500 flex flex-row space-between">
+        <div className=" container mx-auto px-10" >
         <Shop items={items} login={login}/>
-        <button onClick={() => setLogin(false)}>Sign out</button>
+        </div>
+        <div>
+        <button onClick={() => setLogin(false)}
+         className="bg-green-300 rounded-3xl px-6 py-3 dark:bg-black dark:text-green-200 hover:underline flex flex-nowrap">Sign out</button>
+         </div>
+        <div>
+        <DarkMode onThemeSwitch={handleThemeSwitch} theme={theme}/>
+        </div>
+        </div>
     </>)
 } else 
 
 
 if(admin) {
     return (<>
-    <h1>Create Item</h1>
+    <div className="min-h-max bg-green-200 dark:bg-slate-500 flex space-between">
+    <div className="px-2 py-8">
+    <button onClick={handleSignOut} className="text-3xl text-black dark:text-green-200 hover:underline">Sign out</button>
+    <button onClick={handleAdminToShop} className="text-3xl text-black dark:text-green-200 hover:underline">Go to shop</button>
+    </div>
+    <div className="container mx-auto px-10">
+    <h1 className="font-bold text-center text-5xl text-black dark:text-green-200">Creating Item</h1>
     <Form 
     name={name}
     desc={desc}
@@ -110,16 +144,32 @@ if(admin) {
     admin={admin}
     onReset={handleReset}
     />
-    <button onClick={handleSignOut}>Sign out</button>
+    </div>
+    <div className="">
+    <DarkMode onThemeSwitch={handleThemeSwitch}
+    theme={theme}/>
+    </div>
+    </div>
     </>)
 } 
-else
+else if(!admin+!login) {
 
     return (<>
-        <Login />
-        <button onClick={() => setLogin(true)}>Enter like user</button>
-        <button onClick={() => setAdmin(true)}>Enter like admin</button>
-       
+    <div className="h-screen bg-green-200 dark:bg-slate-500 flex justify-between align-center pt-10">
+       <div className="mx-auto">
+       <div> 
+        <h1 className="font-bold text-black dark:text-green-200 text-5xl text-center pb-14">Welcome</h1>
+        </div>
+       <div>
+       <button className="bg-green-300 rounded-3xl px-6 py-3 dark:bg-black dark:text-green-200 mr-8" onClick={() => setLogin(true)}>Enter like user</button>
+        <button className="bg-green-300 rounded-3xl px-6 py-3 dark:bg-black dark:text-green-200" onClick={() => setAdmin(true)}>Enter like admin</button>
+       </div>
+       </div>
+       <div>
+       <DarkMode theme={theme} onThemeSwitch={handleThemeSwitch}/>
+       </div>
+       </div>
       </>
     )
+    } 
   }

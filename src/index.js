@@ -5,7 +5,7 @@ import "./index.css"
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <App  className="bg-slate-900"/>
+    <App />
 );
 
 

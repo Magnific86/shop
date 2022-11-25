@@ -10,18 +10,18 @@ useEffect(() => {
 }, [props.admin, props.items])
 
     return (<>
-    {props.items.length === 0    && <h1>Add first item</h1>}
+    {props.items.length === 0    && <h1 className="text-4xl text-black dark:text-green-200 text-center">Add first item</h1>}
     {props.items && 
     <>  
-    <ul>
+    <ul className="list-none flex flex-wrap mx-15 justify-center min-h-screen">
    {props.items.map(item => (
        <li key={item.id}>
            <Item info={item}/>
-           <button onClick={() => props.onDeleteItem(item.id)}>Delete</button>
+           <button onClick={() => props.onDeleteItem(item.id)} className="text-3xl text-black dark:text-green-200 pb-4">Delete</button>
        </li>
    ))}
 </ul> 
-<button onClick={props.onReset}>Delete all</button>
+<button onClick={props.onReset} className="text-4xl text-red-700 rounded-full bg-red-400 hover:underline px-4 py-2">Delete all</button>
 </>
 }
     </>)
