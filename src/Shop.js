@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from "react"
 import Item from "./Item"
+import  useTotal from "./useTotal"
 
 export default function Shop(props) {
     const [basket, setBasket] = useState(false)
-    const [total, setTotal] = useState(0)
+    const {total, more, less} = useTotal()
     const [userlist, setUserlist] = useState(() => {
         let data = JSON.parse(localStorage.getItem("userlist"))
         if(!data) {
@@ -17,16 +18,7 @@ export default function Shop(props) {
         document.title = `Товаров в магазине: ${props.items.length} Товаров в корзине: ${userlist.length}`
     }, [userlist, basket, total, props.login, props.items])
 
-    function handlePlusItem() {
-        setTotal(total + 1)
-    }
-    function handleMinusItem() {
-        if(total > 0) {
-            setTotal(total - 1)
-        } else {
-            setTotal(0)
-        }
-    }
+
 
     function handleDeleteItem(id) {
         setUserlist(userlist.filter(i => i.id !== id))
@@ -55,10 +47,10 @@ export default function Shop(props) {
         <li key={item.id}>
             <Item info={item} />
             <div className="flex">
-            <button onClick={() => handlePlusItem(item.id)} className="text-2xl text-white dark:text-green-200 rounded-full
+            <button onClick={more} className="text-2xl text-white dark:text-green-200 rounded-full
             bg-black dark:bg-greeb-200 px-4 py-2">+</button>
             <h3 className="text-3xl text-black dark:text-green-200 px-6">{total}</h3>
-            <button onClick={handleMinusItem}
+            <button onClick={less}
             className="text-2xl text-white dark:text-green-200 rounded-full
             bg-black dark:bg-greeb-200 px-4 py-2"
             >-</button>
