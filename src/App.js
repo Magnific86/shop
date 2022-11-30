@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import uuid from "react-uuid"
+import {v4} from "uuid"
 import Admin from "./Admin"
 import Form from "./Form"
 import Shop from "./Shop"
@@ -61,7 +61,7 @@ function handleSubmit(e) {
         setValid("choose category")
         return;
     }
-    setItems([...items, {id: uuid(), name, desc, imag, categ}])
+    setItems([...items, {id: v4(), name, desc, imag, categ}])
 
     setName("")
     setDesc("")

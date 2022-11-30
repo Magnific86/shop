@@ -88,10 +88,15 @@ export default function Shop(props) {
     {props.items.map(item => (
         <li key={item.id}>
             <Item info={item} />
-          {!userlist.includes(item) && <button onClick={() => handleAddItem(item)}
+           {userlist.find(u => {
+            if(u.id === item.id) {
+                return true
+            } else {
+                return false
+            }
+           }) ? <p>Added</p> : <button onClick={() => handleAddItem(item)}
            className="bg-green-300 rounded-3xl px-6 py-3 dark:bg-black dark:text-green-200"
-          >Add to cart</button>} 
-          {userlist.includes(item) && <p>Added</p>  }
+          >Add to cart</button>}
         </li>
     ))}
     </ul>
